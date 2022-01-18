@@ -1,5 +1,7 @@
 conduit-test-service-tutorial/.idea
 conduit-test-service-tutorial/.vscode
+conduit-test-service-tutorial/.vscode/target/**
+
 .gradle
 bin
 .settings
