@@ -49,8 +49,8 @@ Feature: Home Work - favoritos & comentarios
             }
             """
         # Step 5: Verify that favorites article incremented by 1
-        #* def favoritesCount = 0
-        And match response.article.favoritesCount == initialCount*1 + 1
+        * def favoritesCount = 0
+        And match response.article.favoritesCount == favoritesCount + 1
         # Step 6: Get all favorite articles
         Given path 'articles'
         And params {favorited: Donatelo, limit: 10, offset: 0}
@@ -66,7 +66,7 @@ Feature: Home Work - favoritos & comentarios
             }
             """
         # Step 8: Verify that slug ID from Step 2 exist in one of the favorite articles
-        And match response.articles[*].slug == slug
+        And match each response.articles[*].slug == slug
 
 
 
