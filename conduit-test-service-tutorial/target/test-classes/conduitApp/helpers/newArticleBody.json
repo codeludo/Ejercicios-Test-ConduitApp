@@ -1,0 +1,12 @@
+{
+    "article": {
+        "tagList": [
+            "implementations",
+            "welcome",
+            "test"
+        ],
+            "title": "permanent test",
+                "description": "about testing",
+                    "body": "this new article is written in english"
+    }
+}
