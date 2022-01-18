@@ -1,7 +1,7 @@
 conduit-test-service-tutorial/.idea
 conduit-test-service-tutorial/.vscode
 conduit-test-service-tutorial/.vscode/target/**
-
+.txt
 *.rar
 .gradle
 bin
