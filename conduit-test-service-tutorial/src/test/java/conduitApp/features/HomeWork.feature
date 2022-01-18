@@ -50,7 +50,7 @@ Feature: Home Work - favoritos & comentarios
             """
         # Step 5: Verify that favorites article incremented by 1
         * def favoritesCount = 0
-        And match response.article.favoritesCount == favoritesCount + 1
+        And match initialCount == favoritesCount + 1
         # Step 6: Get all favorite articles
         Given path 'articles'
         And params {favorited: Donatelo, limit: 10, offset: 0}
