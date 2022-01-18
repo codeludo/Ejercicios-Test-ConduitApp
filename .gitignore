@@ -1,0 +1,3 @@
+conduit-test-service-tutorial/target/generated-test-sources conduit-test-service-tutorial/target/karate-reports conduit-test-service-tutorial/target/karate.log conduit-test-service-tutorial/target/maven-status conduit-test-service-tutorial/target/test-classes
+jsonplaceholder-karate/target/classes jsonplaceholder-karate/target/test-classes
+karate-proyect/target/classes karate-proyect/target/generated-test-sources karate-proyect/target/karate-reports karate-proyect/target/karate.log karate-proyect/target/maven-status karate-proyect/target/test-classes
