@@ -1,14 +1,14 @@
 Feature: Home Work - favoritos & comentarios
 
     Background: Preconditions
-        * url appiURL
+        Given url appiURL
         * def tokenResponse = callonce read('classpath:conduitApp/helpers/createToken.feature')
         * def token = tokenResponse.authToken
         * def timeValidator = read('classpath:conduitApp/helpers/time-validator.js')
 
     Scenario: Favorite articles
         # Step 1: Get articles of the global feed
-        Given path 'articles'
+        And path 'articles'
         And params {limit: 10, offset: 0}
         And header Authorization = 'Token '+ token
         When method get
@@ -74,7 +74,7 @@ Feature: Home Work - favoritos & comentarios
         * def commentGenerator = Java.type('conduitApp.helpers.DataGenerator')
         * def data = commentGenerator.randomComment()
         # Step 1: Get atricles of the global feed
-        Given path 'articles'
+        And path 'articles'
         And params {limit: 10, offset: 0}
         And header Authorization = 'Token '+ token
         When method get

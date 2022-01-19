@@ -1,0 +1,1728 @@
+{
+	"info": {
+		"_postman_id": "b3788d4e-e0c0-4cdb-8039-4b9cc52b1d99",
+		"name": "postman-ejercicio",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "login",
+			"item": [
+				{
+					"name": "login ok",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();\r",
+									"var token = data.user.token;\r",
+									"console.info(token);\r",
+									"\r",
+									"// Set token to enviroment variable\r",
+									"pm.collectionVariables.set(\"token\", token);\r",
+									"\r",
+									"//Test response status ok\r",
+									"pm.test(\"answer ok\", function () {\r",
+									"    pm.expect(pm.response).have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"//Test answer status 200\r",
+									"pm.test(\"answer ok\", ()=>{\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"//Test tiempo de respuesta\r",
+									"pm.test(\"tiempo de respuesta\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"\r",
+									"// Test string user in response\r",
+									"pm.test(\"matching\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"user\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": {\r\n        \"email\": \"jcam.qvision@gmail.com\",\r\n        \"password\": \"testerExtremo\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/{{login-path}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{login-path}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login no user exist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test response invalid\r",
+									"pm.test(\"invalid pasword\", function () {\r",
+									"    pm.expect(pm.response.text()).contains(\"invalid\");\r",
+									"});\r",
+									"\r",
+									"//Test answer\r",
+									"pm.test(\"answer Forbidden\", ()=>{\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									"//Test tiempo de respuesta\r",
+									"pm.test(\"tiempo de respuesta\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"\r",
+									"// \r",
+									"pm.test(\"matching errors string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"errors\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": {\r\n        \"email\": \"jcam.qvision@gmail.com\",\r\n        \"password\": \"password123\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host-login}}//{{login-path}}",
+							"host": [
+								"{{host-login}}"
+							],
+							"path": [
+								"",
+								"{{login-path}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "tags",
+			"item": [
+				{
+					"name": "tags no login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"// Test status 1\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//  Contenido de los tags 2\r",
+									"pm.test(\"tags content\", function (){\r",
+									"    pm.expect(jsonData.tags).to.have.members(\r",
+									"        [\"implementations\",\r",
+									"        \"welcome\",\r",
+									"        \"codebaseShow\",\r",
+									"        \"introduction\"]);\r",
+									"});\r",
+									"\r",
+									"// probar que los tags vienen en un array 3\r",
+									"pm.test(\"tags response is an array\", function () {\r",
+									"    pm.expect(jsonData.tags).to.be.an(\"array\");\r",
+									"});\r",
+									"\r",
+									"// Test array lenght 4\r",
+									"pm.test(\"tags length\", ()=>{ \r",
+									"    pm.expect(jsonData.tags).to.have.length(4);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "default"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{host}}/{{tags}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{tags}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "articles",
+			"item": [
+				{
+					"name": "feed login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();\r",
+									"console.log(data.articles)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/{{articles}}/{{feed}}?limit=10&offset=0",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{articles}}",
+								"{{feed}}"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "new article",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var created = pm.collectionVariables.get(\"created\");\r",
+									"console.log(created);\r",
+									"\r",
+									"if(created === \"true\"){\r",
+									"    var host = pm.environment.get(\"host\");\r",
+									"    var articles = pm.collectionVariables.get(\"articles\");\r",
+									"    var slug = pm.collectionVariables.get(\"slug\");\r",
+									"    var token = pm.collectionVariables.get(\"token\");\r",
+									"    \r",
+									"    console.log(token);\r",
+									"// request delete post\r",
+									"    const echoDelRequest = {\r",
+									"    url: `${host}/${articles}/${slug}`,\r",
+									"    method: 'DELETE',\r",
+									"    header: `Authorization: Bearer ${token}`,\r",
+									"    body: {\r",
+									"    mode: 'raw',\r",
+									"    raw: JSON.stringify({ key: 'this is json' })\r",
+									"  }\r",
+									"  };\r",
+									"\r",
+									"    pm.sendRequest(echoDelRequest, function (err, res) {\r",
+									"        console.log(res);\r",
+									"    });\r",
+									"}else{\r",
+									"   pm.test(\"Status code is 422\", function () {\r",
+									"    pm.expect(pm.request.code).eql(422);\r",
+									"});\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();\r",
+									"console.log(data);\r",
+									"var slug = data.article.slug\r",
+									"pm.collectionVariables.set(\"slug\", slug);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"article\":{\r\n      \"tagList\":[\r\n         \"implementations\"\r\n      ],\r\n      \"title\":\"permanent test\",\r\n      \"description\":\"about testing\",\r\n      \"body\":\"this new article is written in english\"\r\n   }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/{{articles}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{articles}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get articulo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{articles}}/{{slug}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{articles}}",
+								"{{slug}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "global feed no login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Step 1: Get articles of the global feed\r",
+									"// Step 2: Get the slug ID for the first article, save it to variable\r",
+									"\r",
+									"pm.test(\"get global feed articles got status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var slug = pm.response.json().articles[0].slug;\r",
+									"pm.collectionVariables.set(\"slug\", slug);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/{{articles}}?limit=10&offset=0",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{articles}}"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update article",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"article\":{\r\n      \"title\":\"permanent test\",\r\n      \"slug\":\"permanent-test-9550\",\r\n      \"body\":\"this new article is written in english\\n\\n\\nedicion realizada\",\r\n      \"description\":\"about testing\",\r\n      \"createdAt\":\"2022-01-11T20:30:13.714Z\",\r\n      \"updatedAt\":\"2022-01-11T20:30:13.714Z\",\r\n      \"tagList\":[\r\n         \"implementations\"\r\n      ],\r\n      \"favoritesCount\":0,\r\n      \"favorited\":false,\r\n      \"author\":{\r\n         \"username\":\"Donatelo\",\r\n         \"bio\":null,\r\n         \"image\":\"https://api.realworld.io/images/smiley-cyrus.jpeg\",\r\n         \"followedBy\":[\r\n            \r\n         ],\r\n         \"following\":false\r\n      }\r\n   }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/{{articles}}/{{slug}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{articles}}",
+								"{{slug}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "del articulo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"delete\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{articles}}/{{slug}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{articles}}",
+								"{{slug}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "comment",
+			"item": [
+				{
+					"name": "new article Copy",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();\r",
+									"var slug = data.article.slug\r",
+									"pm.collectionVariables.set(\"slug\", slug);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"article\":{\r\n      \"tagList\":[\r\n         \"implementations\"\r\n      ],\r\n      \"title\":\"permanent test\",\r\n      \"description\":\"about testing\",\r\n      \"body\":\"this new article is written in english\"\r\n   }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/{{articles}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{articles}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get article comments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{articles}}/{{slug}}/{{comments}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{articles}}",
+								"{{slug}}",
+								"{{comments}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete article comments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{articles}}/{{slug}}/{{comments}}/{{id_comment}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{articles}}",
+								"{{slug}}",
+								"{{comments}}",
+								"{{id_comment}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test\r",
+									"\r",
+									"var data = pm.response.json();\r",
+									"var id = data.comment.id;\r",
+									"console.log(id);\r",
+									"\r",
+									"pm.collectionVariables.set(\"id_comment\", id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"comment\":{\r\n      \"body\":\"este es un comentario\"\r\n   }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/{{articles}}/{{slug}}/{{comments}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{articles}}",
+								"{{slug}}",
+								"{{comments}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Homework - favorites & comments",
+			"item": [
+				{
+					"name": "new like",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Favorite article\r",
+									"// Step 1: Get articles of the global feed\r",
+									"//Step 2: Get favorites count and slug ID for the first article\r",
+									"\r",
+									"\r",
+									"var host = pm.environment.get(\"host\");\r",
+									"var articles = pm.collectionVariables.get(\"articles\");\r",
+									"var token = pm.collectionVariables.get(\"token\");\r",
+									"\r",
+									"/**\r",
+									" *  usamos este get para tomar los articulos y revisar el contador de favoritos\r",
+									" * si esta en uno, se va a borrar el favorito\r",
+									" * si esta en 0 (por que manualmente se cambio) se omite el delete\r",
+									" */\r",
+									"\r",
+									"const getArticles = {\r",
+									"    url: `${host}/${articles}/?limit=10&offset=0`,\r",
+									"    method: 'GET',\r",
+									"    header: `Authorization: Bearer ${token}`,\r",
+									"    body: {}\r",
+									"  };\r",
+									"\r",
+									"pm.sendRequest(getArticles, function (err, response) {\r",
+									"    var res = response;\r",
+									"    pm.test(\"get feed code 200\", function(){\r",
+									"        pm.expect(res).to.have.property('code',200);\r",
+									"        setTimeout(function(){}, 500);\r",
+									"    });\r",
+									"    //console.log(res);\r",
+									"    var data = res.json();\r",
+									"    var slug = data.articles[0].slug;\r",
+									"    pm.collectionVariables.set(\"slug\", slug);\r",
+									"    //console.log(slug);\r",
+									"    var initialFavoritesCount = data.articles[0].favoritesCount;\r",
+									"    pm.collectionVariables.set(\"initialFavoritesCount\", initialFavoritesCount);\r",
+									"    //console.log(initialFavoritesCount);\r",
+									"\r",
+									"    if(initialFavoritesCount == 1){\r",
+									"        const delFavorite = {\r",
+									"        url: `${host}/${articles}/${slug}/favorite`,\r",
+									"        method: 'DELETE',\r",
+									"        header: `Authorization: Bearer ${token}`,\r",
+									"        body: {}\r",
+									"        };\r",
+									"\r",
+									"\r",
+									"        pm.sendRequest(delFavorite, function (err, response) {\r",
+									"            console.log(response.json());\r",
+									"            pm.test(\"favorite deleted got status code 200\", function(){\r",
+									"                pm.expect(response).to.have.property('code', 200);\r",
+									"                setTimeout(function(){}, 500);\r",
+									"            });\r",
+									"        });\r",
+									"\r",
+									"\r",
+									"        pm.sendRequest(getArticles, function (err, response) {\r",
+									"            console.log(response.json());\r",
+									"            var res = response;\r",
+									"            pm.test(\"get feed articles got code 200\", function(){\r",
+									"                pm.expect(res).to.have.property('code',200);\r",
+									"                setTimeout(function(){}, 500);\r",
+									"                });\r",
+									"            console.log(res);\r",
+									"            var data = res.json();\r",
+									"            var slug = data.articles[0].slug;\r",
+									"            pm.collectionVariables.set(\"slug\", slug);\r",
+									"            console.log(slug);\r",
+									"            var finalFavoritesCount = data.articles[0].favoritesCount;\r",
+									"            pm.collectionVariables.set(\"finalFavoritesCount\", finalFavoritesCount);\r",
+									"            console.log(finalFavoritesCount);\r",
+									"        });\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"\r",
+									"        \r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Step 3: Make POST request to increse favorites count for the first article\r",
+									"// Test runs just after method post\r",
+									"// Step 4: Verify response schema\r",
+									"// response schema\r",
+									"const postFavoriteSchema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"article\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"required\": [\r",
+									"                \"id\",\r",
+									"                \"slug\",\r",
+									"                \"title\",\r",
+									"                \"description\",\r",
+									"                \"body\",\r",
+									"                \"createdAt\",\r",
+									"                \"updatedAt\",\r",
+									"                \"authorId\",\r",
+									"                \"tagList\",\r",
+									"                \"author\",\r",
+									"                \"favoritedBy\",\r",
+									"                \"favorited\",\r",
+									"                \"favoritesCount\"\r",
+									"            ],\r",
+									"            \"properties\": {\r",
+									"                \"id\": {\r",
+									"                    \"type\": \"integer\"\r",
+									"                },\r",
+									"                \"slug\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                },\r",
+									"                \"title\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                },\r",
+									"                \"description\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                },\r",
+									"                \"body\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                },\r",
+									"                \"createdAt\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                },\r",
+									"                \"updatedAt\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                },\r",
+									"                \"authorId\": {\r",
+									"                    \"type\": \"integer\"\r",
+									"                },\r",
+									"                \"tagList\": {\r",
+									"                    \"type\": \"array\",\r",
+									"                    \"items\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    }\r",
+									"                },\r",
+									"                \"author\": {\r",
+									"                    \"type\": \"object\",\r",
+									"                    \"required\": [\r",
+									"                        \"username\",\r",
+									"                        \"bio\",\r",
+									"                        \"image\",\r",
+									"                        \"following\"\r",
+									"                    ],\r",
+									"                    \"properties\": {\r",
+									"                        \"username\": {\r",
+									"                            \"type\": \"string\"\r",
+									"                        },\r",
+									"                        \"bio\": {\r",
+									"                            \"type\": \"null\"\r",
+									"                        },\r",
+									"                        \"image\": {\r",
+									"                            \"type\": \"string\"\r",
+									"                        },\r",
+									"                        \"following\": {\r",
+									"                            \"type\": \"boolean\"\r",
+									"                        }\r",
+									"                    }\r",
+									"                },\r",
+									"                \"favoritedBy\": {\r",
+									"                    \"type\": \"array\",\r",
+									"                    \"items\": {\r",
+									"                        \"type\": \"object\",\r",
+									"                        \"required\": [\r",
+									"                            \"id\",\r",
+									"                            \"email\",\r",
+									"                            \"username\",\r",
+									"                            \"password\",\r",
+									"                            \"image\",\r",
+									"                            \"bio\",\r",
+									"                            \"demo\"\r",
+									"                        ],\r",
+									"                        \"properties\": {\r",
+									"                            \"id\": {\r",
+									"                                \"type\": \"integer\"\r",
+									"                            },\r",
+									"                            \"email\": {\r",
+									"                                \"type\": \"string\"\r",
+									"                            },\r",
+									"                            \"username\": {\r",
+									"                                \"type\": \"string\"\r",
+									"                            },\r",
+									"                            \"password\": {\r",
+									"                                \"type\": \"string\"\r",
+									"                            },\r",
+									"                            \"image\": {\r",
+									"                                \"type\": \"string\"\r",
+									"                            },\r",
+									"                            \"bio\": {\r",
+									"                                \"type\": \"null\"\r",
+									"                            },\r",
+									"                            \"demo\": {\r",
+									"                                \"type\": \"boolean\"\r",
+									"                            }\r",
+									"                        }\r",
+									"                    }\r",
+									"                },\r",
+									"                \"favorited\": {\r",
+									"                    \"type\": \"boolean\"\r",
+									"                },\r",
+									"                \"favoritesCount\": {\r",
+									"                    \"type\": \"integer\"\r",
+									"                }\r",
+									"            }\r",
+									"        }\r",
+									"    }\r",
+									"}\r",
+									"// valid schema test\r",
+									"pm.test(\"Valid response to post method schema favorites\", () =>{\r",
+									"    pm.response.to.have.jsonSchema(postFavoriteSchema);\r",
+									"    setTimeout(function(){}, 500);\r",
+									"});\r",
+									"// favorites in 1 always test\r",
+									"pm.test(\"always favoritesCount should be 1\", function () {\r",
+									"    pm.expect(pm.response.json().article.favoritesCount).eqls(1);\r",
+									"});\r",
+									"// username variable saved and username test\r",
+									"var username = pm.response.json().article.author.username;\r",
+									"pm.collectionVariables.set(\"username\", username);\r",
+									"pm.test(\"always username should be Donatelo\", function () {\r",
+									"    pm.expect(pm.response.json().article.author.username).eqls(\"Donatelo\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/{{articles}}/{{slug}}/favorite",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{articles}}",
+								"{{slug}}",
+								"favorite"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "liked posts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Step 6: Get all favorite articles\r",
+									"pm.test(\"method get favorited articles got status code\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"// Step 7: Verify response schema\r",
+									"const getFavoritedArticlesResponse = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"articles\": {\r",
+									"            \"type\": \"array\",\r",
+									"            \"items\": {\r",
+									"                \"type\": \"object\",\r",
+									"                \"required\": [\r",
+									"                    \"slug\",\r",
+									"                    \"title\",\r",
+									"                    \"description\",\r",
+									"                    \"body\",\r",
+									"                    \"createdAt\",\r",
+									"                    \"updatedAt\",\r",
+									"                    \"tagList\",\r",
+									"                    \"author\",\r",
+									"                    \"favoritesCount\",\r",
+									"                    \"favorited\"\r",
+									"                ],\r",
+									"                \"properties\": {\r",
+									"                    \"slug\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    },\r",
+									"                    \"title\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    },\r",
+									"                    \"description\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    },\r",
+									"                    \"body\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    },\r",
+									"                    \"createdAt\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    },\r",
+									"                    \"updatedAt\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    },\r",
+									"                    \"tagList\": {\r",
+									"                        \"type\": \"array\",\r",
+									"                        \"items\": {\r",
+									"                            \"type\": \"string\"\r",
+									"                        }\r",
+									"                    },\r",
+									"                    \"author\": {\r",
+									"                        \"type\": \"object\",\r",
+									"                        \"required\": [\r",
+									"                            \"username\",\r",
+									"                            \"bio\",\r",
+									"                            \"image\",\r",
+									"                            \"following\"\r",
+									"                        ],\r",
+									"                        \"properties\": {\r",
+									"                            \"username\": {\r",
+									"                                \"type\": \"string\"\r",
+									"                            },\r",
+									"                            \"bio\": {\r",
+									"                                \"type\": \"null\"\r",
+									"                            },\r",
+									"                            \"image\": {\r",
+									"                                \"type\": \"string\"\r",
+									"                            },\r",
+									"                            \"following\": {\r",
+									"                                \"type\": \"boolean\"\r",
+									"                            }\r",
+									"                        }\r",
+									"                    },\r",
+									"                    \"favoritesCount\": {\r",
+									"                        \"type\": \"integer\"\r",
+									"                    },\r",
+									"                    \"favorited\": {\r",
+									"                        \"type\": \"boolean\"\r",
+									"                    }\r",
+									"                }\r",
+									"            }\r",
+									"        },\r",
+									"        \"articlesCount\": {\r",
+									"            \"type\": \"integer\"\r",
+									"        }\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"// valid schema test\r",
+									"pm.test(\"Valid response schema favorited articles\", () =>{\r",
+									"    pm.response.to.have.jsonSchema(getFavoritedArticlesResponse);\r",
+									"});\r",
+									"// Step 8: Verify that slug ID from Step 2 exist in one of the favorite articles\r",
+									"pm.test(\"slug ID from Step 2 exist in one of the favorite articles\", function () {\r",
+									"    pm.expect(pm.response.json().articles[0].slug).eqls(pm.collectionVariables.get(\"slug\"))\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{articles}}?favorited={{username}}&limit=10&offset=0",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{articles}}"
+							],
+							"query": [
+								{
+									"key": "favorited",
+									"value": "{{username}}"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "feed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var host = pm.environment.get(\"host\");\r",
+									"var articles = pm.collectionVariables.get(\"articles\");\r",
+									"var token = pm.collectionVariables.get(\"token\");\r",
+									"\r",
+									"const getArticles = {\r",
+									"    url: `${host}/${articles}/?limit=10&offset=0`,\r",
+									"    method: 'GET',\r",
+									"    header: `Authorization: Bearer ${token}`,\r",
+									"    body: {}\r",
+									"  };\r",
+									"\r",
+									"pm.sendRequest(getArticles, function (err, response) {\r",
+									"    var res = response;\r",
+									"    pm.test(\"get feed code 200\", function(){\r",
+									"        pm.expect(res).to.have.property('code',200);\r",
+									"        setTimeout(function(){}, 500);\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/{{articles}}?limit=10&offset=0",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{articles}}"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "commentaries number",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Step 4: Verify response schema\r",
+									"const commentariesSchema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"required\": [\r",
+									"        \"comments\"\r",
+									"    ],\r",
+									"    \"properties\": {\r",
+									"        \"comments\": {\r",
+									"            \"type\": \"array\",\r",
+									"            \"items\": {\r",
+									"                \"type\": \"object\",\r",
+									"                \"required\": [\r",
+									"                    \"id\",\r",
+									"                    \"createdAt\",\r",
+									"                    \"updatedAt\",\r",
+									"                    \"body\",\r",
+									"                    \"author\"\r",
+									"                ],\r",
+									"                \"properties\": {\r",
+									"                    \"id\": {\r",
+									"                        \"type\": \"integer\"\r",
+									"                    },\r",
+									"                    \"createdAt\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    },\r",
+									"                    \"updatedAt\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    },\r",
+									"                    \"body\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    },\r",
+									"                    \"author\": {\r",
+									"                        \"type\": \"object\",\r",
+									"                        \"required\": [\r",
+									"                            \"username\",\r",
+									"                            \"bio\",\r",
+									"                            \"image\",\r",
+									"                            \"following\"\r",
+									"                        ],\r",
+									"                        \"properties\": {\r",
+									"                            \"username\": {\r",
+									"                                \"type\": \"string\"\r",
+									"                            },\r",
+									"                            \"bio\": {\r",
+									"                                \"type\": \"null\"\r",
+									"                            },\r",
+									"                            \"image\": {\r",
+									"                                \"type\": \"string\"\r",
+									"                            },\r",
+									"                            \"following\": {\r",
+									"                                \"type\": \"boolean\"\r",
+									"                            }\r",
+									"                        }\r",
+									"                    }\r",
+									"                }\r",
+									"            }\r",
+									"        }\r",
+									"    }\r",
+									"}\r",
+									"// valid response schema\r",
+									"pm.test(\"Valid response to get method schema commentaries\", () =>{\r",
+									"    pm.response.to.have.jsonSchema(commentariesSchema);\r",
+									"    setTimeout(function(){}, 500);\r",
+									"});\r",
+									"\r",
+									"// Step 5: Get the count of the comments array lentgh and save to variable\r",
+									"\r",
+									"var commentariesCount = pm.response.json().comments.length\r",
+									"pm.collectionVariables.set(\"commentariesCount\", commentariesCount);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/{{articles}}/{{slug}}/comments",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{articles}}",
+								"{{slug}}",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "test comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// # Step 6: Make a POST request to publish a new comment\r",
+									"// # Step 7: Verify response schema that should contain posted comment text\r",
+									"var host = pm.environment.get(\"host\");\r",
+									"var articles = pm.collectionVariables.get(\"articles\");\r",
+									"var slug = pm.collectionVariables.get(\"slug\");\r",
+									"var token = pm.collectionVariables.get(\"token\");\r",
+									"const commentResponse = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"required\": [\r",
+									"        \"comment\"\r",
+									"    ],\r",
+									"    \"properties\": {\r",
+									"        \"comment\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"required\": [\r",
+									"                \"id\",\r",
+									"                \"createdAt\",\r",
+									"                \"updatedAt\",\r",
+									"                \"body\",\r",
+									"                \"author\"\r",
+									"            ],\r",
+									"            \"properties\": {\r",
+									"                \"id\": {\r",
+									"                    \"type\": \"integer\"\r",
+									"                },\r",
+									"                \"createdAt\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                },\r",
+									"                \"updatedAt\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                },\r",
+									"                \"body\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                },\r",
+									"                \"author\": {\r",
+									"                    \"type\": \"object\",\r",
+									"                    \"required\": [\r",
+									"                        \"username\",\r",
+									"                        \"bio\",\r",
+									"                        \"image\",\r",
+									"                        \"following\"\r",
+									"                    ],\r",
+									"                    \"properties\": {\r",
+									"                        \"username\": {\r",
+									"                            \"type\": \"string\"\r",
+									"                        },\r",
+									"                        \"bio\": {\r",
+									"                            \"type\": \"null\"\r",
+									"                        },\r",
+									"                        \"image\": {\r",
+									"                            \"type\": \"string\"\r",
+									"                        },\r",
+									"                        \"following\": {\r",
+									"                            \"type\": \"boolean\"\r",
+									"                        }\r",
+									"                    }\r",
+									"                }\r",
+									"            }\r",
+									"        }\r",
+									"    }\r",
+									"}\r",
+									"//test to validate response schema\r",
+									"pm.test(\"Valid response to post method schema commentaries\", () =>{\r",
+									"    pm.response.to.have.jsonSchema(commentResponse);\r",
+									"    setTimeout(function(){},500);\r",
+									"});\r",
+									"console.log('schema already validated')\r",
+									"console.log('adding time for other request')\r",
+									"// send get request to all comments to refresh results\r",
+									"const getCommentariesToRefresh = {\r",
+									"    url: `${host}/${articles}/${slug}/comments`,\r",
+									"    method: 'GET',\r",
+									"    header: `Authorization: Bearer ${token}`,\r",
+									"    body: {}\r",
+									"  };\r",
+									"\r",
+									"pm.sendRequest(getCommentariesToRefresh, function (err, response) {\r",
+									"    var res = response.json();\r",
+									"    pm.test(\"get commentaries to refresh have not errors\", function(){\r",
+									"        pm.expect(err).to.equal(null);\r",
+									"        setTimeout(function(){}, 500);\r",
+									"    });\r",
+									"    var count = res.comments.length;\r",
+									"    console.log('count to refresh');\r",
+									"    console.log(count);\r",
+									"    pm.collectionVariables.set(\"finalCommentariesCount\", count);\r",
+									"\r",
+									"});\r",
+									"\r",
+									"// Step 8: Get the list of all comments for this article one more time\r",
+									"const getCommentaries = {\r",
+									"    url: `${host}/${articles}/${slug}/comments`,\r",
+									"    method: 'GET',\r",
+									"    header: `Authorization: Bearer ${token}`,\r",
+									"    body: {}\r",
+									"  };\r",
+									"\r",
+									"pm.sendRequest(getCommentaries, function (err, response) {\r",
+									"    \r",
+									"    pm.test(\"get commentaries have not errors\", function(){\r",
+									"        pm.expect(err).to.equal(null);\r",
+									"        var res = response.json();\r",
+									"        \r",
+									"\r",
+									"        // save the 'test para borrar' comment\r",
+									"        // is saved in the las position of the response schema\r",
+									"        let arrayComment = res.comments;\r",
+									"        console.log(arrayComment);\r",
+									"        let id_comment = arrayComment.at(-1).id;\r",
+									"        console.log(id_comment);\r",
+									"        pm.collectionVariables.set(\"id_comment\", id_comment);\r",
+									"    });\r",
+									"\r",
+									"    // Step 9: Verify number of comments increased by 1 (similar like we did with favorite counts)\r",
+									"    let initialCount =  pm.collectionVariables.get(\"commentariesCount\");\r",
+									"    let finalCount = pm.collectionVariables.get(\"finalCommentariesCount\");\r",
+									"    let expectedVaule = initialCount+1;\r",
+									"    console.log('initial count')\r",
+									"    console.log(initialCount)\r",
+									"    console.log('final count')\r",
+									"    console.log(finalCount)\r",
+									"    console.log('expected value')\r",
+									"    console.log(expectedVaule)\r",
+									"\r",
+									"// Step 9: Verify number of comments increased by 1 (similar like we did with favorite counts)\r",
+									"    // test comments has increased by 1\r",
+									"    pm.test(\"number of comments has increased by 1\", ()=>{\r",
+									"        pm.expect(expectedVaule).to.equal(finalCount);\r",
+									"        });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"    "
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// # Step 8: Get the list of all comments for this article one more time\r",
+									"var host = pm.environment.get(\"host\");\r",
+									"var articles = pm.collectionVariables.get(\"articles\");\r",
+									"var slug = pm.collectionVariables.get(\"slug\");\r",
+									"var token = pm.collectionVariables.get(\"token\");\r",
+									"const getCommentaries = {\r",
+									"    url: `${host}/${articles}/${slug}/comments`,\r",
+									"    method: 'GET',\r",
+									"    header: `Authorization: Bearer ${token}`,\r",
+									"    body: {}\r",
+									"  };\r",
+									"\r",
+									"pm.sendRequest(getCommentaries, function (err, response) {\r",
+									"    var res = response.json();\r",
+									"    pm.test(\"get commentaries have not errors\", function(){\r",
+									"        pm.expect(err).to.equal(null);\r",
+									"        \r",
+									"    });\r",
+									"    var commentariesCount = res.comments.length\r",
+									"    pm.collectionVariables.set(\"commentariesCount\", commentariesCount);\r",
+									"    console.log(commentariesCount);\r",
+									"    pm.test('commentCount is saved', function(){\r",
+									"        pm.expect(commentariesCount).gt(0)\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"comment\": {\r\n        \"body\": \"test para borrar\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/{{articles}}/{{slug}}/comments",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{articles}}",
+								"{{slug}}",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var host = pm.environment.get(\"host\");\r",
+									"var articles = pm.collectionVariables.get(\"articles\");\r",
+									"var slug = pm.collectionVariables.get(\"slug\");\r",
+									"var token = pm.collectionVariables.get(\"token\");\r",
+									"\r",
+									"console.log('verifiying comment array decreased by 1')\r",
+									"// send get request to all comments to refresh results\r",
+									"const getCommentaries = {\r",
+									"    url: `${host}/${articles}/${slug}/comments`,\r",
+									"    method: 'GET',\r",
+									"    header: `Authorization: Bearer ${token}`,\r",
+									"    body: {}\r",
+									"  };\r",
+									"\r",
+									"\r",
+									"\r",
+									"// test comment was deleted\r",
+									"pm.test(\"Delete test comment got Status code 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"\r",
+									"    pm.sendRequest(getCommentaries, function (err, response) {\r",
+									"        var res = response.json();\r",
+									"        pm.test(\"get commentaries after delete has not errors\", function(){\r",
+									"            pm.expect(err).to.equal(null);\r",
+									"            setTimeout(function(){}, 500);\r",
+									"        });\r",
+									"        let count = res.comments.length;\r",
+									"        console.log('count after delete a comment');\r",
+									"        console.log(count);\r",
+									"        pm.collectionVariables.set(\"afterDeleteCount\", count);\r",
+									"\r",
+									"    });\r",
+									"});\r",
+									"    \r",
+									"\r",
+									"    // Verify number of comments decreased by 1\r",
+									"    // test comments has decreased by 1\r",
+									"    pm.test(\"number of comments has decreased by 1\", ()=>{\r",
+									"        let initialCount =  pm.collectionVariables.get(\"finalCommentariesCount\");\r",
+									"        let finalCount = pm.collectionVariables.get(\"afterDeleteCount\");\r",
+									"        console.log('initial count')\r",
+									"        console.log(initialCount)\r",
+									"        console.log('final count')\r",
+									"        console.log(finalCount)\r",
+									"        pm.expect(finalCount).to.equal(initialCount-1);\r",
+									"        });\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/{{articles}}/{{slug}}/comments/{{id_comment}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{articles}}",
+								"{{slug}}",
+								"comments",
+								"{{id_comment}}"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "login-path",
+			"value": "api/users/login",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpjYW0ucXZpc2lvbkBnbWFpbC5jb20iLCJ1c2VybmFtZSI6IkRvbmF0ZWxvIiwicGFzc3dvcmQiOiIkMmEkMTAkN2UyWTFUSUlDZFhUYW1aM0ZIbXVoZUFwLml2dHVXRUY1T01yRDM0L0hJWGVhcEdJMklyMjYiLCJiaW8iOm51bGwsImltYWdlIjoiaHR0cHM6Ly9hcGkucmVhbHdvcmxkLmlvL2ltYWdlcy9zbWlsZXktY3lydXMuanBlZyIsImlhdCI6MTY0MTkxNzAwNywiZXhwIjoxNjQ3MTAxMDA3fQ.riGYB4-FvfBGROAJ2Z_v-kp4wgDFXmr1yPZGoGEWkZ8"
+		},
+		{
+			"key": "tags",
+			"value": "api/tags",
+			"type": "string"
+		},
+		{
+			"key": "articles",
+			"value": "api/articles",
+			"type": "string"
+		},
+		{
+			"key": "feed",
+			"value": "feed",
+			"type": "string"
+		},
+		{
+			"key": "slug",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "comments",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "created",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "id_comment",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "initialFavoritesCount",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "host",
+			"value": "https://conduit.productionready.io",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "finalFavoritesCount",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "username",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "commentariesCount",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "finalCommentariesCount",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "afterDeleteCount",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
