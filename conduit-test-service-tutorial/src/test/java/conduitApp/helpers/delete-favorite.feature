@@ -3,7 +3,7 @@ Feature: delete favorite of first article if counts 1
     Background:
         Given url appiURL
         * def tokenResponse = callonce read('classpath:conduitApp/helpers/createToken.feature')
-        * def slugResponse = callonce read('classpath:conduitApp/helpers/slug.feature')
+        * def slugResponse = call read('classpath:conduitApp/helpers/slug.feature')
         * def slug = slugResponse.slugItem
         * def token = tokenResponse.authToken
 

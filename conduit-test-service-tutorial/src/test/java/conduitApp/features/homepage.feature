@@ -18,7 +18,7 @@ Feature: Test for the home page
     When method get
     Then  status 200
     And match response.tags contains ['welcome']
-    And match response.tags !contains ['test']
+    And match response.tags !contains ['hola']
     And match response.tags contains any ['test', 'welcome']
     And match response.tags == '#array'
     And match each response.tags == '#string'
@@ -39,7 +39,7 @@ Feature: Test for the home page
     And match response == {'articles':'#[4]', 'articlesCount':4}
     And match response.articlesCount == 4
     And match response.articles[0].createdAt contains "2022"
-    And match response.articles[*].favoritesCount contains 0
+    And match each response.articles[*].favoritesCount == '#number? _ >= 0'
     And match response.articles[*].author.bio contains null
     And match response..bio contains null
     And match response..bio contains '##string'

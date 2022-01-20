@@ -1,26 +1,28 @@
 Feature: Home Work - favoritos & comentarios
+As user of the api
+I want to give a favorite an one article and delete it again
+and make a comment post and delete it
 
     Background: Preconditions
         Given url appiURL
         * def tokenResponse = callonce read('classpath:conduitApp/helpers/createToken.feature')
         * def token = tokenResponse.authToken
         * def timeValidator = read('classpath:conduitApp/helpers/time-validator.js')
-
+        * def slugResponse = callonce read('classpath:conduitApp/helpers/slug.feature')
+        
     Scenario: Favorite articles
         # Step 1: Get articles of the global feed
-        And path 'articles'
-        And params {limit: 10, offset: 0}
-        And header Authorization = 'Token '+ token
-        When method get
-        Then status 200
         # Step 2: Get the favorites count and slug ID for the first artice, save it to variables
-        * def slug = response.articles[0].slug
-        * def initialCount = response.articles[0].favoritesCount
+        * def slug = slugResponse.slugItem
+        * def initialCountResponse = call read('classpath:conduitApp/helpers/favorites.feature')
+        * def initialCount = initialCountResponse.count
         * print initialCount
-        * if(initialCount == 1) karate.call('delete-favorite.feature')
-        And match response.articles[0].title == "permanent test"
+        * if(initialCount == 1) karate.call('classpath:conduitApp/helpers/delete-favorite.feature')
+        * def countResponse = call read('classpath:conduitApp/helpers/favorites.feature')
+        * def count = countResponse.count
+        * print count
         # Step 3: Make POST request to increse favorites count for the first article
-        Given path 'articles/'+slug+'/favorite'
+        And path 'articles/'+slug+'/favorite'
         And header Authorization = 'Token '+ token
         When method Post
         # Step 4: Verify response schema
@@ -49,8 +51,9 @@ Feature: Home Work - favoritos & comentarios
             }
             """
         # Step 5: Verify that favorites article incremented by 1
-        * def favoritesCount = 0
-        And match initialCount == favoritesCount + 1
+        * def finalCountResponse = call read('classpath:conduitApp/helpers/favorites.feature')
+        * def finalCount = finalCountResponse.count
+        And match finalCount == count + 1
         # Step 6: Get all favorite articles
         Given path 'articles'
         And params {favorited: Donatelo, limit: 10, offset: 0}
@@ -74,20 +77,15 @@ Feature: Home Work - favoritos & comentarios
         * def commentGenerator = Java.type('conduitApp.helpers.DataGenerator')
         * def data = commentGenerator.randomComment()
         # Step 1: Get atricles of the global feed
-        And path 'articles'
-        And params {limit: 10, offset: 0}
-        And header Authorization = 'Token '+ token
-        When method get
-        Then status 200
-        # Step 2: Get the slug ID for the first arice, save it to variable
-        * def slug = response.articles[0].slug
+        # Step 2: Get the slug ID for the first article, save it to variable
+        # Already done with the favorite.feature
+        * def slug = slugResponse.slugItem
         # Step 3: Make a GET call to 'comments' end-point to get all comments
         Given path 'articles/'+slug+'/comments'
         And header Authorization = 'Token '+ token
         When method get
         Then status 200
         * def commentaries = response
-        * print commentaries
         # Step 4: Verify response schema
         And match each response.comments ==
         """
@@ -107,7 +105,6 @@ Feature: Home Work - favoritos & comentarios
         # Step 5: Get the count of the comments array lentgh and save it into a variable
         * def arrayComments = response.comments
         * def initialCommentsCount = arrayComments.length
-        * print initialCommentsCount
         * def comment = data.body
         # Step 6: Make a POST request to publish a new comment
         Given path 'articles/'+slug+'/comments'
@@ -130,11 +127,9 @@ Feature: Home Work - favoritos & comentarios
         When method get
         Then status 200
         * def commentaries = response
-        * print commentaries
         And match commentaries.comments[*].body contains any comment
         # Step 9: Verify number of comments increased by 1 (similar like we did with favorite counts)
         * def commentariesCount = commentaries.comments.length
-        * print commentariesCount
         And match commentariesCount == initialCommentsCount + 1 
         # Step 10: Make a DELETE request to delete comment
         Given path 'articles/'+slug+'/comments/'+idLastComment
@@ -148,6 +143,5 @@ Feature: Home Work - favoritos & comentarios
         Then status 200
         * def allCommentaries = response
         * def allCommentariesCount = allCommentaries.comments.length
-        * print allCommentariesCount
         And match allCommentariesCount == commentariesCount - 1
         * print 'OK'
