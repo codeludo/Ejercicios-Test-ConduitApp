@@ -127,12 +127,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{host-login}}//{{login-path}}",
+							"raw": "{{host}}/{{login-path}}",
 							"host": [
-								"{{host-login}}"
+								"{{host}}"
 							],
 							"path": [
-								"",
 								"{{login-path}}"
 							]
 						}
@@ -216,52 +215,6 @@
 			"name": "articles",
 			"item": [
 				{
-					"name": "feed login",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var data = pm.response.json();\r",
-									"console.log(data.articles)"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/{{articles}}/{{feed}}?limit=10&offset=0",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"{{articles}}",
-								"{{feed}}"
-							],
-							"query": [
-								{
-									"key": "limit",
-									"value": "10"
-								},
-								{
-									"key": "offset",
-									"value": "0"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "new article",
 					"event": [
 						{
@@ -272,7 +225,7 @@
 									"console.log(created);\r",
 									"\r",
 									"if(created === \"true\"){\r",
-									"    var host = pm.environment.get(\"host\");\r",
+									"    var host = pm.collectionVariables.get(\"host\");\r",
 									"    var articles = pm.collectionVariables.get(\"articles\");\r",
 									"    var slug = pm.collectionVariables.get(\"slug\");\r",
 									"    var token = pm.collectionVariables.get(\"token\");\r",
@@ -595,37 +548,6 @@
 					"response": []
 				},
 				{
-					"name": "delete article comments",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/{{articles}}/{{slug}}/{{comments}}/{{id_comment}}",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"{{articles}}",
-								"{{slug}}",
-								"{{comments}}",
-								"{{id_comment}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Post comment",
 					"event": [
 						{
@@ -669,6 +591,37 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Delete article comments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{articles}}/{{slug}}/{{comments}}/{{id_comment}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{articles}}",
+								"{{slug}}",
+								"{{comments}}",
+								"{{id_comment}}"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"auth": {
@@ -706,7 +659,7 @@
 			"name": "Homework - favorites & comments",
 			"item": [
 				{
-					"name": "new like",
+					"name": "Post a new like",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -717,7 +670,7 @@
 									"//Step 2: Get favorites count and slug ID for the first article\r",
 									"\r",
 									"\r",
-									"var host = pm.environment.get(\"host\");\r",
+									"var host = pm.collectionVariables.get(\"host\");\r",
 									"var articles = pm.collectionVariables.get(\"articles\");\r",
 									"var token = pm.collectionVariables.get(\"token\");\r",
 									"\r",
@@ -979,7 +932,7 @@
 					"response": []
 				},
 				{
-					"name": "liked posts",
+					"name": "Get the liked posts",
 					"event": [
 						{
 							"listen": "test",
@@ -1125,13 +1078,13 @@
 					"response": []
 				},
 				{
-					"name": "feed",
+					"name": "Get all list in global feed",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var host = pm.environment.get(\"host\");\r",
+									"var host = pm.collectionVariables.get(\"host\");\r",
 									"var articles = pm.collectionVariables.get(\"articles\");\r",
 									"var token = pm.collectionVariables.get(\"token\");\r",
 									"\r",
@@ -1189,7 +1142,7 @@
 					"response": []
 				},
 				{
-					"name": "commentaries number",
+					"name": "Get the initial commentaries number",
 					"event": [
 						{
 							"listen": "test",
@@ -1303,7 +1256,7 @@
 					"response": []
 				},
 				{
-					"name": "test comment",
+					"name": "Post a test comment",
 					"event": [
 						{
 							"listen": "test",
@@ -1311,7 +1264,7 @@
 								"exec": [
 									"// # Step 6: Make a POST request to publish a new comment\r",
 									"// # Step 7: Verify response schema that should contain posted comment text\r",
-									"var host = pm.environment.get(\"host\");\r",
+									"var host = pm.collectionVariables.get(\"host\");\r",
 									"var articles = pm.collectionVariables.get(\"articles\");\r",
 									"var slug = pm.collectionVariables.get(\"slug\");\r",
 									"var token = pm.collectionVariables.get(\"token\");\r",
@@ -1452,7 +1405,7 @@
 							"script": {
 								"exec": [
 									"// # Step 8: Get the list of all comments for this article one more time\r",
-									"var host = pm.environment.get(\"host\");\r",
+									"var host = pm.collectionVariables.get(\"host\");\r",
 									"var articles = pm.collectionVariables.get(\"articles\");\r",
 									"var slug = pm.collectionVariables.get(\"slug\");\r",
 									"var token = pm.collectionVariables.get(\"token\");\r",
@@ -1473,7 +1426,7 @@
 									"    pm.collectionVariables.set(\"commentariesCount\", commentariesCount);\r",
 									"    console.log(commentariesCount);\r",
 									"    pm.test('commentCount is saved', function(){\r",
-									"        pm.expect(commentariesCount).gt(0)\r",
+									"        pm.expect(commentariesCount).eqls(0)\r",
 									"    });\r",
 									"});"
 								],
@@ -1518,13 +1471,13 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "Delete the posted comment",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var host = pm.environment.get(\"host\");\r",
+									"var host = pm.collectionVariables.get(\"host\");\r",
 									"var articles = pm.collectionVariables.get(\"articles\");\r",
 									"var slug = pm.collectionVariables.get(\"slug\");\r",
 									"var token = pm.collectionVariables.get(\"token\");\r",
@@ -1695,9 +1648,8 @@
 		},
 		{
 			"key": "host",
-			"value": "https://conduit.productionready.io",
-			"type": "string",
-			"disabled": true
+			"value": "https://api.realworld.io",
+			"type": "string"
 		},
 		{
 			"key": "finalFavoritesCount",
