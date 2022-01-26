@@ -8,12 +8,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.*;
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class LoginService {
-    
-    static String token;
 
     @Before
     public void setUp(){
@@ -27,7 +25,6 @@ public class LoginService {
 
     @Test
     public void login(){
-         token =
                 given()
                         .when()
                         .body("{\n" +
@@ -39,14 +36,6 @@ public class LoginService {
                         .post("/users/login")
                         .then()
                         .statusCode(HttpStatus.SC_OK)
-                        .body("user.username", equalTo("Donatelo"))
-                        .extract()
-                        .jsonPath().getString("user.token");
-
-        System.out.println(token);
-
-
-
-
+                        .body("user.username", equalTo("Donatelo"));
     }
 }
