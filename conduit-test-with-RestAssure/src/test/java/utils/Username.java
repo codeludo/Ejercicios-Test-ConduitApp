@@ -1,17 +1,21 @@
+package utils;
+
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.ErrorLoggingFilter;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.Before;
-import org.junit.Test;
 
 import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
-public class LoginService {
+public class Username {
+
+    public static String username;
 
     @Before
     public void setUp(){
@@ -21,10 +25,18 @@ public class LoginService {
         requestSpecification = new RequestSpecBuilder()
                 .setContentType(ContentType.JSON)
                 .build();
+        responseSpecification = new ResponseSpecBuilder().
+                expectStatusCode(200).
+                expectContentType(ContentType.JSON).
+                build();
     }
 
-    @Test
-    public void login(){
+    public static String getUsername() {
+        return username;
+    }
+
+    public static void setUsername() {
+        username =
                 given()
                         .when()
                         .body("{\n" +
@@ -35,7 +47,7 @@ public class LoginService {
                                 "}")
                         .post("/users/login")
                         .then()
-                        .statusCode(HttpStatus.SC_OK)
-                        .body("user.username", equalTo("Donatelo"));
+                        .extract()
+                        .jsonPath().getString("user.username");
     }
 }

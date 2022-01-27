@@ -1,0 +1,86 @@
+{
+  "type": "object",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": {},
+  "examples": [
+    {
+      "profile": {
+        "username": "Donatelo",
+        "bio": "Perfil de usuario para testing",
+        "image": "https://api.realworld.io/images/smiley-cyrus.jpeg",
+        "following": false
+      }
+    }
+  ],
+  "required": [
+    "profile"
+  ],
+  "properties": {
+    "profile": {
+      "$id": "#/properties/profile",
+      "type": "object",
+      "title": "The profile schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": {},
+      "examples": [
+        {
+          "username": "Donatelo",
+          "bio": "Perfil de usuario para testing",
+          "image": "https://api.realworld.io/images/smiley-cyrus.jpeg",
+          "following": false
+        }
+      ],
+      "required": [
+        "username",
+        "bio",
+        "image",
+        "following"
+      ],
+      "properties": {
+        "username": {
+          "$id": "#/properties/profile/properties/username",
+          "type": "string",
+          "title": "The username schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "Donatelo"
+          ]
+        },
+        "bio": {
+          "$id": "#/properties/profile/properties/bio",
+          "type": "string",
+          "title": "The bio schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "Perfil de usuario para testing"
+          ]
+        },
+        "image": {
+          "$id": "#/properties/profile/properties/image",
+          "type": "string",
+          "title": "The image schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "https://api.realworld.io/images/smiley-cyrus.jpeg"
+          ]
+        },
+        "following": {
+          "$id": "#/properties/profile/properties/following",
+          "type": "boolean",
+          "title": "The following schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": false,
+          "examples": [
+            false
+          ]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

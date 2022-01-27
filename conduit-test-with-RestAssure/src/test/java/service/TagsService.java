@@ -1,3 +1,5 @@
+package service;
+
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.ErrorLoggingFilter;
@@ -5,7 +7,9 @@ import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import utils.Token;
 
 import java.util.List;
 
@@ -16,8 +20,8 @@ public class TagsService {
 
     public static List<String> tags;
 
-    @Before
-    public void setUp(){
+    @BeforeClass
+    public static void setUp(){
         baseURI = "https://api.realworld.io";
         basePath = "/api";
         filters(new RequestLoggingFilter(), new ResponseLoggingFilter(), new ErrorLoggingFilter());
@@ -46,10 +50,11 @@ public class TagsService {
     @Test
     public void LoginUserRequestTags(){
 
+
         Token.setToken();
         given().
                 spec(requestSpecification).
-                header("authorization", "Bearer "+Token.getToken()).
+                header("authorization", "Bearer "+ Token.getToken()).
                 when().
                 get("tags").
                 then().

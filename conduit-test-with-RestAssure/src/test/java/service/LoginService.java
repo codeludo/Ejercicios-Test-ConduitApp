@@ -1,3 +1,5 @@
+package service;
+
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.ErrorLoggingFilter;
@@ -6,16 +8,16 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
-public class Token {
+public class LoginService {
 
-    public static String token;
-
-    @Before
-    public void setUp(){
+    @BeforeClass
+    public static void setUp(){
         baseURI = "https://api.realworld.io";
         basePath = "/api";
         filters(new RequestLoggingFilter(), new ResponseLoggingFilter(), new ErrorLoggingFilter());
@@ -26,28 +28,23 @@ public class Token {
                 expectStatusCode(200).
                 expectContentType(ContentType.JSON).
                 build();
+
     }
 
-    public static String getToken() {
-        return token;
-    }
-
-    public static void setToken() {
-        token =
+    @Test
+    public void login(){
                 given()
-                    .when()
-                    .body("{\n" +
-                            "  \"user\": {\n" +
-                            "    \"email\": \"jcam.qvision@gmail.com\",\n" +
-                            "    \"password\": \"testerExtremo\"\n" +
-                            "  }\n" +
-                            "}")
-                    .post("/users/login")
-                    .then()
-                    .statusCode(HttpStatus.SC_OK)
-                    .body("user.username", equalTo("Donatelo"))
-                    .extract()
-                    .jsonPath().getString("user.token");
+                        .spec(requestSpecification)
+                        .when()
+                        .body("{\n" +
+                                "  \"user\": {\n" +
+                                "    \"email\": \"jcam.qvision@gmail.com\",\n" +
+                                "    \"password\": \"testerExtremo\"\n" +
+                                "  }\n" +
+                                "}")
+                        .post("/users/login")
+                        .then()
+                        .spec(responseSpecification)
+                        .body("user.username", equalTo("Donatelo"));
     }
-
 }
