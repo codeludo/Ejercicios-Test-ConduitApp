@@ -15,6 +15,8 @@ public class RandomArticle {
     private static String description;
     private static String body;
     private static Map<String, Object>  article = new HashMap<>();
+    private static Map<String, Object>  comment = new HashMap<>();
+    private static String commentBody;
 
     static Faker faker = new Faker();
 
@@ -88,6 +90,19 @@ public class RandomArticle {
     public static Map<String, Object> getUpdateArticle(){
         Map<String, Object> jsonObject = new HashMap<>();
         jsonObject.put("article", article);
+        return jsonObject;
+    }
+
+    public static String getCommentBody(){
+        return faker.lorem().paragraph();
+    }
+
+    public static Map<String, Object> getComment(){
+        comment.clear();
+        comment.put("body", getCommentBody());
+
+        Map<String, Object> jsonObject = new HashMap<>();
+        jsonObject.put("comment", comment);
         return jsonObject;
     }
 }

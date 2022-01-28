@@ -6,15 +6,19 @@ import io.restassured.filter.log.ErrorLoggingFilter;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import utils.RandomArticle;
 import utils.Slug;
 import utils.Token;
 
+import java.util.List;
+
 import static io.restassured.RestAssured.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 
 /**
  * Clase que permite las siguientes peticiones
@@ -39,7 +43,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
  */
 public class SlugService {
 
-    public static String commentId;
+    public static int commentId;
     public static int commentCounter;
     public static int favoriteCounter;
 
@@ -90,7 +94,53 @@ public class SlugService {
                 body("article.tagList", equalTo(RandomArticle.getTags()));
     }
 
+    @Test
+    public void postNewCommentArticle(){
 
+        Response response =
+                given().
+                        spec(requestSpecification).
+                        header("authorization", "Bearer "+ Token.getToken()).
+                        when().
+                        get("/articles/"+Slug.getSlug()+"/comments").
+                        then().
+                        spec(responseSpecification).
+                        assertThat().
+                        body("comments", hasSize(0)).
+                        and().
+                        extract().
+                        response();
+        List<String> comments = response.path("comments");
+        commentCounter = comments.size();
 
+         commentId =
+        given().
+                spec(requestSpecification).
+                header("authorization", "Bearer "+ Token.getToken()).
+                body(RandomArticle.getComment()).
+                when().
+                post("/articles/"+Slug.getSlug()+"/comments").
+                then().
+                spec(responseSpecification).
+                extract().
+                path("comment.id");
+    }
 
+    @Test
+    public void verifyCommentsHasIncreasedByOne(){
+        given().
+                spec(requestSpecification).
+                header("authorization", "Bearer "+ Token.getToken()).
+                when().
+                get("/articles/"+Slug.getSlug()+"/comments").
+                then().
+                spec(responseSpecification).
+                assertThat().
+                body("comments", hasSize(commentCounter+1));
+    }
+
+    @Test
+    public void deleteCommentAndShouldBeOK(){
+        
+    }
 }

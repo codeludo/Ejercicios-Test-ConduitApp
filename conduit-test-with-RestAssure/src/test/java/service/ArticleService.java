@@ -61,6 +61,7 @@ public class ArticleService {
                         response();
         articlesCount = response.path("articlesCount");
     }
+
     @Test
     public void postNewRandomArticle(){
         RandomArticle.setArticle();
