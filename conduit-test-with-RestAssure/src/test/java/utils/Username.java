@@ -31,23 +31,20 @@ public class Username {
                 build();
     }
 
-    public static String getUsername() {
-        return username;
+    public static String getUsername()
+    {
+        return given()
+                .when()
+                .body("{\n" +
+                        "  \"user\": {\n" +
+                        "    \"email\": \"jcam.qvision@gmail.com\",\n" +
+                        "    \"password\": \"testerExtremo\"\n" +
+                        "  }\n" +
+                        "}")
+                .post("/users/login")
+                .then()
+                .extract()
+                .jsonPath().getString("user.username");
     }
 
-    public static void setUsername() {
-        username =
-                given()
-                        .when()
-                        .body("{\n" +
-                                "  \"user\": {\n" +
-                                "    \"email\": \"jcam.qvision@gmail.com\",\n" +
-                                "    \"password\": \"testerExtremo\"\n" +
-                                "  }\n" +
-                                "}")
-                        .post("/users/login")
-                        .then()
-                        .extract()
-                        .jsonPath().getString("user.username");
-    }
 }

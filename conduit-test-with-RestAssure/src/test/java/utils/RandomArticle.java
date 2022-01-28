@@ -8,11 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 public class RandomArticle {
+
+
     private static List<String> tags;
     private static String title;
     private static String description;
     private static String body;
-    static Map<String, Object>  article = new HashMap<>();
+    private static Map<String, Object>  article = new HashMap<>();
 
     static Faker faker = new Faker();
 
@@ -58,7 +60,7 @@ public class RandomArticle {
         setDescription();
         setBody();
 
-        article.put("tags", getTags());
+        article.put("tagList", getTags());
         article.put("title", getTitle());
         article.put("description", getDescription());
         article.put("body", getBody());
@@ -68,6 +70,23 @@ public class RandomArticle {
 
     public static Map<String, Object> getArticle() {
         Map<String, Object>  jsonObject = new HashMap<>();
+        jsonObject.put("article", article);
+        return jsonObject;
+    }
+
+    public static void setUpdateArticle(){
+        article.clear();
+        setTags();
+        setTitle();
+        setDescription();
+
+        article.put("tagList", getTags());
+        article.put("title", getTitle());
+        article.put("description", getDescription());
+    }
+
+    public static Map<String, Object> getUpdateArticle(){
+        Map<String, Object> jsonObject = new HashMap<>();
         jsonObject.put("article", article);
         return jsonObject;
     }

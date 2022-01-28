@@ -1,4 +1,4 @@
-package service;
+package utils;
 
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
@@ -7,21 +7,13 @@ import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import utils.Token;
-
-import java.util.List;
 
 import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.hasSize;
 
-public class TagsService {
+public class Slug {
 
-    public static List<String> tags;
-
-    @BeforeClass
-    public static void setUp(){
+    @Before
+    public void setUp(){
         baseURI = "https://api.realworld.io";
         basePath = "/api";
         filters(new RequestLoggingFilter(), new ResponseLoggingFilter(), new ErrorLoggingFilter());
@@ -32,36 +24,20 @@ public class TagsService {
                 expectStatusCode(200).
                 expectContentType(ContentType.JSON).
                 build();
-
     }
 
-    @Test
-    public void noLoginUserRequestTags(){
-                given().
+    public static String getSlug() {
+
+        return given().
                         spec(requestSpecification).
+                        header("authorization", "Bearer " + Token.getToken()).
+                        param("limit", 10).
+                        param("offset", 0).
                         when().
-                        get("tags").
+                        get("/articles").
                         then().
-                        spec(responseSpecification).
-                        and().
-                        body("tags", hasSize(4));
+                        extract().
+                        path("articles[0].slug");
     }
-
-    @Test
-    public void LoginUserRequestTags(){
-
-        given().
-                spec(requestSpecification).
-                header("authorization", "Bearer "+ Token.getToken()).
-                when().
-                get("tags").
-                then().
-                spec(responseSpecification).
-                assertThat().
-                body("tags", hasSize(5));
-    }
-
-
-
 
 }

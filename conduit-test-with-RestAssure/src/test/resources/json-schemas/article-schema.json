@@ -1,0 +1,151 @@
+{
+  "default": {},
+  "required": [
+    "article"
+  ],
+  "title": "The root schema",
+  "type": "object",
+  "properties": {
+    "article": {
+      "$id": "#/properties/article",
+      "default": {},
+      "required": [
+        "title",
+        "slug",
+        "body",
+        "description",
+        "createdAt",
+        "updatedAt",
+        "tagList",
+        "favoritesCount",
+        "favorited",
+        "author"
+      ],
+      "title": "The article schema",
+      "type": "object",
+      "properties": {
+        "title": {
+          "$id": "#/properties/article/properties/title",
+          "default": "",
+          "title": "The title schema",
+          "type": "string"
+        },
+        "slug": {
+          "$id": "#/properties/article/properties/slug",
+          "default": "",
+          "title": "The slug schema",
+          "type": "string"
+        },
+        "body": {
+          "$id": "#/properties/article/properties/body",
+          "default": "",
+          "title": "The body schema",
+          "type": "string"
+        },
+        "description": {
+          "$id": "#/properties/article/properties/description",
+          "default": "",
+          "title": "The description schema",
+          "type": "string"
+        },
+        "createdAt": {
+          "$id": "#/properties/article/properties/createdAt",
+          "default": "",
+          "title": "The createdAt schema",
+          "type": "string"
+        },
+        "updatedAt": {
+          "$id": "#/properties/article/properties/updatedAt",
+          "default": "",
+          "title": "The updatedAt schema",
+          "type": "string"
+        },
+        "tagList": {
+          "$id": "#/properties/article/properties/tagList",
+          "default": [],
+          "title": "The tagList schema",
+          "type": "array",
+          "additionalItems": true,
+          "items": {
+            "$id": "#/properties/article/properties/tagList/items",
+            "anyOf": [
+              {
+                "$id": "#/properties/article/properties/tagList/items/anyOf/0",
+                "default": "",
+                "title": "The first anyOf schema",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "favoritesCount": {
+          "$id": "#/properties/article/properties/favoritesCount",
+          "default": 0,
+          "title": "The favoritesCount schema",
+          "type": "integer"
+        },
+        "favorited": {
+          "$id": "#/properties/article/properties/favorited",
+          "default": false,
+          "examples": [
+            false
+          ],
+          "title": "The favorited schema",
+          "type": "boolean"
+        },
+        "author": {
+          "$id": "#/properties/article/properties/author",
+          "default": {},
+          "required": [
+            "username",
+            "bio",
+            "image",
+            "followedBy",
+            "following"
+          ],
+          "title": "The author schema",
+          "type": "object",
+          "properties": {
+            "username": {
+              "$id": "#/properties/article/properties/author/properties/username",
+              "default": "",
+              "title": "The username schema",
+              "type": "string"
+            },
+            "bio": {
+              "$id": "#/properties/article/properties/author/properties/bio",
+              "default": "",
+              "title": "The bio schema",
+              "type": "string"
+            },
+            "image": {
+              "$id": "#/properties/article/properties/author/properties/image",
+              "default": "",
+              "title": "The image schema",
+              "type": "string"
+            },
+            "followedBy": {
+              "$id": "#/properties/article/properties/author/properties/followedBy",
+              "default": [],
+              "title": "The followedBy schema",
+              "type": "array",
+              "additionalItems": true,
+              "items": {
+                "$id": "#/properties/article/properties/author/properties/followedBy/items"
+              }
+            },
+            "following": {
+              "$id": "#/properties/article/properties/author/properties/following",
+              "default": false,
+              "title": "The following schema",
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

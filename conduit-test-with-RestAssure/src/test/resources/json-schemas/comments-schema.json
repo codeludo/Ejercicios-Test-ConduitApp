@@ -1,0 +1,20 @@
+{
+  "default": {},
+  "required": [
+    "comments"
+  ],
+  "type": "object",
+  "properties": {
+    "comments": {
+      "$id": "#/properties/comments",
+      "default": [],
+      "type": "array",
+      "additionalItems": true,
+      "items": {
+        "$id": "#/properties/comments/items",
+        "type": []
+      }
+    }
+  },
+  "additionalProperties": true
+}

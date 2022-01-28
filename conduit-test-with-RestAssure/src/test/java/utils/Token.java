@@ -31,25 +31,19 @@ public class Token {
     }
 
     public static String getToken() {
-        return token;
+        return given()
+                .spec(requestSpecification)
+                .when()
+                .body("{\n" +
+                        "  \"user\": {\n" +
+                        "    \"email\": \"jcam.qvision@gmail.com\",\n" +
+                        "    \"password\": \"testerExtremo\"\n" +
+                        "  }\n" +
+                        "}")
+                .post("/users/login")
+                .then()
+                .spec(responseSpecification)
+                .extract()
+                .jsonPath().getString("user.token");
     }
-
-    public static void setToken() {
-        token =
-                given()
-                        .spec(requestSpecification)
-                    .when()
-                    .body("{\n" +
-                            "  \"user\": {\n" +
-                            "    \"email\": \"jcam.qvision@gmail.com\",\n" +
-                            "    \"password\": \"testerExtremo\"\n" +
-                            "  }\n" +
-                            "}")
-                    .post("/users/login")
-                    .then()
-                        .spec(responseSpecification)
-                    .extract()
-                    .jsonPath().getString("user.token");
-    }
-
 }

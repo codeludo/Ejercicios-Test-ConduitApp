@@ -41,8 +41,6 @@ public class ProfileService {
 
     @Test
     public void userProfileValidateResponseSchema(){
-        Token.setToken();
-        Username.setUsername();
         given().
                 spec(requestSpecification).
                 header("authorization", "Bearer "+ Token.getToken()).
