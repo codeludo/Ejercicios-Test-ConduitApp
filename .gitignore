@@ -12,3 +12,4 @@ target
 .project
 settings.gradle
 .idea
+.vscode
