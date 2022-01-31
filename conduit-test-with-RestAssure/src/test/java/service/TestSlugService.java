@@ -6,14 +6,11 @@ import io.restassured.filter.log.ErrorLoggingFilter;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import utils.RandomArticle;
 import utils.Slug;
 import utils.Token;
-
-import java.util.List;
 
 import static io.restassured.RestAssured.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -41,11 +38,7 @@ import static org.hamcrest.Matchers.hasSize;
  * #13 eliminar articulo
  *
  */
-public class SlugService {
-
-    public static int commentId;
-    public static int commentCounter;
-    public static int favoriteCounter;
+public class TestSlugService {
 
     @BeforeClass
     public static void setUp(){
@@ -56,10 +49,10 @@ public class SlugService {
         requestSpecification = new RequestSpecBuilder()
                 .setContentType(ContentType.JSON)
                 .build();
-        responseSpecification = new ResponseSpecBuilder().
-                expectStatusCode(200).
-                expectContentType(ContentType.JSON).
-                build();
+//        responseSpecification = new ResponseSpecBuilder().
+//                expectStatusCode(200).
+//                expectContentType(ContentType.JSON).
+//                build();
     }
 
     @Test
@@ -70,7 +63,7 @@ public class SlugService {
                 when().
                 get("/articles/"+ Slug.getSlug()).
                 then().
-                spec(responseSpecification).
+                //spec(responseSpecification).
                 and().
                 assertThat().
                 body(matchesJsonSchemaInClasspath("json-schemas/article-schema.json"));
@@ -86,61 +79,11 @@ public class SlugService {
                 when().
                 put("/articles/"+Slug.getSlug()).
                 then().
-                spec(responseSpecification).
+                //spec(responseSpecification).
                 and().
                 assertThat().
                 body("article.title", equalTo(RandomArticle.getTitle())).
                 body("article.description", equalTo(RandomArticle.getDescription())).
                 body("article.tagList", equalTo(RandomArticle.getTags()));
-    }
-
-    @Test
-    public void postNewCommentArticle(){
-
-        Response response =
-                given().
-                        spec(requestSpecification).
-                        header("authorization", "Bearer "+ Token.getToken()).
-                        when().
-                        get("/articles/"+Slug.getSlug()+"/comments").
-                        then().
-                        spec(responseSpecification).
-                        assertThat().
-                        body("comments", hasSize(0)).
-                        and().
-                        extract().
-                        response();
-        List<String> comments = response.path("comments");
-        commentCounter = comments.size();
-
-         commentId =
-        given().
-                spec(requestSpecification).
-                header("authorization", "Bearer "+ Token.getToken()).
-                body(RandomArticle.getComment()).
-                when().
-                post("/articles/"+Slug.getSlug()+"/comments").
-                then().
-                spec(responseSpecification).
-                extract().
-                path("comment.id");
-    }
-
-    @Test
-    public void verifyCommentsHasIncreasedByOne(){
-        given().
-                spec(requestSpecification).
-                header("authorization", "Bearer "+ Token.getToken()).
-                when().
-                get("/articles/"+Slug.getSlug()+"/comments").
-                then().
-                spec(responseSpecification).
-                assertThat().
-                body("comments", hasSize(commentCounter+1));
-    }
-
-    @Test
-    public void deleteCommentAndShouldBeOK(){
-        
     }
 }

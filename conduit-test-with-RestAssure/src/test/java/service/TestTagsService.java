@@ -6,7 +6,6 @@ import io.restassured.filter.log.ErrorLoggingFilter;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import utils.Token;
@@ -16,9 +15,8 @@ import java.util.List;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.hasSize;
 
-public class TagsService {
+public class TestTagsService {
 
-    public static List<String> tags;
 
     @BeforeClass
     public static void setUp(){
@@ -28,10 +26,10 @@ public class TagsService {
         requestSpecification = new RequestSpecBuilder()
                 .setContentType(ContentType.JSON)
                 .build();
-        responseSpecification = new ResponseSpecBuilder().
-                expectStatusCode(200).
-                expectContentType(ContentType.JSON).
-                build();
+//        responseSpecification = new ResponseSpecBuilder().
+//                expectStatusCode(200).
+//                expectContentType(ContentType.JSON).
+//                build();
 
     }
 
@@ -42,7 +40,7 @@ public class TagsService {
                         when().
                         get("tags").
                         then().
-                        spec(responseSpecification).
+                        //spec(responseSpecification).
                         and().
                         body("tags", hasSize(4));
     }
@@ -56,7 +54,7 @@ public class TagsService {
                 when().
                 get("tags").
                 then().
-                spec(responseSpecification).
+                //spec(responseSpecification).
                 assertThat().
                 body("tags", hasSize(5));
     }

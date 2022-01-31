@@ -12,24 +12,24 @@ import static io.restassured.RestAssured.*;
 
 public class Slug {
 
-    @Before
-    public void setUp(){
-        baseURI = "https://api.realworld.io";
-        basePath = "/api";
-        filters(new RequestLoggingFilter(), new ResponseLoggingFilter(), new ErrorLoggingFilter());
-        requestSpecification = new RequestSpecBuilder()
-                .setContentType(ContentType.JSON)
-                .build();
-        responseSpecification = new ResponseSpecBuilder().
-                expectStatusCode(200).
-                expectContentType(ContentType.JSON).
-                build();
-    }
+//    @Before
+//    public void setUp(){
+//        baseURI = "https://api.realworld.io";
+//        basePath = "/api";
+//        filters(new RequestLoggingFilter(), new ResponseLoggingFilter(), new ErrorLoggingFilter());
+//        requestSpecification = new RequestSpecBuilder()
+//                .setContentType(ContentType.JSON)
+//                .build();
+//        responseSpecification = new ResponseSpecBuilder().
+//                expectStatusCode(200).
+//                expectContentType(ContentType.JSON).
+//                build();
+//    }
 
     public static String getSlug() {
 
         return given().
-                        spec(requestSpecification).
+                        //spec(requestSpecification).
                         header("authorization", "Bearer " + Token.getToken()).
                         param("limit", 10).
                         param("offset", 0).

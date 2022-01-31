@@ -6,15 +6,13 @@ import io.restassured.filter.log.ErrorLoggingFilter;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
-import org.apache.http.HttpStatus;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
-public class LoginService {
+public class TestLoginService {
 
     @BeforeClass
     public static void setUp(){
@@ -24,10 +22,10 @@ public class LoginService {
         requestSpecification = new RequestSpecBuilder()
                 .setContentType(ContentType.JSON)
                 .build();
-        responseSpecification = new ResponseSpecBuilder().
-                expectStatusCode(200).
-                expectContentType(ContentType.JSON).
-                build();
+//        responseSpecification = new ResponseSpecBuilder().
+//                expectStatusCode(200).
+//                expectContentType(ContentType.JSON).
+//                build();
 
     }
 
@@ -44,7 +42,8 @@ public class LoginService {
                                 "}")
                         .post("/users/login")
                         .then()
-                        .spec(responseSpecification)
+                        //.spec(responseSpecification)
+                        .statusCode(200)
                         .body("user.username", equalTo("Donatelo"));
     }
 }
