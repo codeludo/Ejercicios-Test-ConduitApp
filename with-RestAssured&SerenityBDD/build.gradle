@@ -1,19 +1,66 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "io.freefair.gradle:lombok-plugin:5.0.0-rc6"
+        classpath "net.serenity-bdd:serenity-gradle-plugin:2.2.0"
+        classpath "net.serenity-bdd:serenity-single-page-report:2.2.0"
+    }
+}
+
 plugins {
     id 'java'
+    id "io.freefair.lombok" version "5.0.0-rc6"
 }
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+defaultTasks 'clean', 'test', 'aggregate'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: "io.freefair.lombok"
+apply plugin: 'net.serenity-bdd.aggregator'
 
 group 'org.example'
 version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    mavenLocal()
+}
+
+serenity {
+    reports = ["single-page-html"]
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation 'com.github.javafaker:javafaker:1.0.2',
+            'io.rest-assured:json-schema-validator:4.5.0',
+            'io.rest-assured:rest-assured:4.5.0',
+            'org.slf4j:slf4j-simple:1.7.35',
+            'net.serenity-bdd:serenity-core:3.1.20',
+            'net.serenity-bdd:serenity-screenplay:3.1.20',
+            'net.serenity-bdd:serenity-screenplay-rest:3.1.20',
+            'net.serenity-bdd:serenity-screenplay-webdriver:3.1.20',
+            'com.fasterxml.jackson.core:jackson-core:2.13.1',
+            'com.fasterxml.jackson.core:jackson-databind:2.13.1',
+            'com.fasterxml.jackson.core:jackson-annotations:2.13.1'
+    testImplementation 'net.serenity-bdd:serenity-cucumber:3.1.20',
+            'junit:junit:4.13.2',
+            'org.hamcrest:hamcrest:2.2'
 }
 
 test {
-    useJUnitPlatform()
+    maxParallelForks = Runtime.runtime.availableProcessors()
 }
+
+gradle.startParameter.continueOnFailure = true
+test.finalizedBy(aggregate, reports)
